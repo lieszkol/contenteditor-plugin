@@ -41,15 +41,12 @@ editor.addEventListener('saved', function (ev) {
 ContentEdit.Root.get().bind('focus', function(element) {
     var dataTools = element._parent._domElement.dataset.tools
     var tools;
-    switch (dataTools) {
-        case '':
-            tools = editor._toolbox._tools;
-            break;
-        case '*':
-            tools = ContentTools.DEFAULT_TOOLS;
-            break;
-        default:
-            tools = [element._parent._domElement.dataset.tools.split(',')];
+    if (dataTools) {
+        tools = [element._parent._domElement.dataset.tools.split(',')];
+    } else if (dataTools == '') {
+        tools = editor._toolbox._tools;
+    } else {
+        tools = ContentTools.DEFAULT_TOOLS;
     }
     if (element.isFixed()) tools = dataTools !== '*' ? tools : [['undo', 'redo', 'remove']];
     if (editor.toolbox().tools() !== tools) editor.toolbox().tools(tools);
